@@ -72,8 +72,7 @@ function MovieList({genreId}) {
                     <MovieCard 
                         key={index} 
                         movie={item} 
-                        index={index} 
-                        total={movieList.length}
+                        isSearchResult={false}
                     />
                 ))}
             </div>

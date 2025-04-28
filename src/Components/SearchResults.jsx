@@ -23,8 +23,8 @@ function SearchResults() {
       <h2 className="text-2xl text-white font-bold mb-6">Search Results for "{query}"</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12">
         {results.map((movie) => (
-          <div className="flex justify-center">
-            <MovieCard key={movie.id} movie={movie} isSearchResult={true}/>
+          <div key={movie.id} className="flex justify-center">
+            <MovieCard movie={movie} isSearchResult={true} />
           </div>
         ))}
       </div>
