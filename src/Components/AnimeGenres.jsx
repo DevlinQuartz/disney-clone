@@ -29,12 +29,15 @@ function AnimeGenres({ onGenreSelect, selectedGenre }) {
             {animeGenresList.map((genre) => (
                 <div key={genre.id} 
                      onClick={() => onGenreSelect(genre.id)}
-                     className={`relative border-[2px] ${selectedGenre === genre.id ? 'border-white border-[5px]' : 'border-gray-600'} 
-                              rounded-lg hover:scale-110 transition-all duration-300 ease-in-out 
-                              cursor-pointer hover:border-white hover:border-[5px] 
-                              flex items-center justify-center
-                              w-[200px] h-[100px] md:w-[250px] md:h-[150px]
-                              bg-[#1A1A1A]/50`}>
+                     className={`relative border-[2px] ${
+                        selectedGenre === genre.id 
+                            ? 'border-white border-[2px] shadow-[0_0_15px_rgba(255,255,255,0.7)]' 
+                            : 'border-gray-600'
+                     } rounded-lg hover:scale-110 transition-all duration-300 ease-in-out 
+                     cursor-pointer hover:border-white hover:border-[3px] 
+                     flex items-center justify-center
+                     w-[200px] h-[100px] md:w-[250px] md:h-[150px]
+                     bg-[#1A1A1A]/50`}>
                     <h2 className='text-white font-bold text-lg md:text-xl'>
                         {genre.name}
                     </h2>
