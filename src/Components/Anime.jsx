@@ -1,40 +1,48 @@
 import React, { useEffect, useState } from 'react'
 import AnimeAPI from '../Services/AnimeAPI'
-import AnimeCard from './AnimeCard'
 import AnimeGenres from './AnimeGenres'
+import AnimeCard from './AnimeCard'
 
 function Anime() {
   const [animeList, setAnimeList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedGenre, setSelectedGenre] = useState('top');
 
   useEffect(() => {
-    AnimeAPI.getTopAnime()
-      .then(resp => {
-        setAnimeList(resp.data.data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error fetching anime:", err);
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
+    fetchAnime(selectedGenre);
+  }, [selectedGenre]);
 
-  if (loading) return <div className="p-8 text-white">Loading...</div>;
-  if (error) return <div className="p-8 text-white">Error: {error}</div>;
+  const fetchAnime = async (genreId) => {
+    setLoading(true);
+    try {
+      const response = await AnimeAPI.getAnimeByGenre(genreId);
+      setAnimeList(response.data.data);
+    } catch (err) {
+      console.error("Error fetching anime:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="p-8">
-      <h2 className="text-2xl text-white font-bold mb-6">Top Rated Anime</h2>
-      <AnimeGenres />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12 mt-8">
-        {animeList.map((anime) => (
-          <div key={anime.mal_id} className="flex justify-center">
-            <AnimeCard anime={anime} />
-          </div>
-        ))}
-      </div>
+      <AnimeGenres 
+        onGenreSelect={setSelectedGenre} 
+        selectedGenre={selectedGenre}
+      />
+      {loading ? (
+        <div className="text-white text-center mt-8">Loading...</div>
+      ) : error ? (
+        <div className="text-white text-center mt-8">Error: {error}</div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12 mt-8">
+          {animeList.map((anime) => (
+            <AnimeCard key={anime.mal_id} anime={anime} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
