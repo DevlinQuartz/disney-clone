@@ -28,8 +28,21 @@ function MovieCard({movie, isSearchResult = false}) {
   const checkSpaceOnRight = () => {
     if (cardRef.current) {
       const rect = cardRef.current.getBoundingClientRect();
-      const spaceOnRight = window.innerWidth - rect.right;
-      setShowOnLeft(spaceOnRight < 600); // size of width and margin of the card
+      const screenWidth = window.innerWidth;
+      const elementRightPosition = rect.right;
+      
+      // Calculate required space based on screen size
+      let requiredSpace;
+      if (screenWidth >= 768) { // md breakpoint
+        requiredSpace = 500 + 40; // dialog width + margin for md screens
+      } else if (screenWidth >= 640) { // sm breakpoint
+        requiredSpace = 300 + 30; // dialog width + margin for sm screens
+      } else {
+        requiredSpace = 200 + 20; // dialog width + margin for xs screens
+      }
+
+      const availableSpace = screenWidth - elementRightPosition;
+      setShowOnLeft(availableSpace < requiredSpace);
     }
   };
 
@@ -37,6 +50,18 @@ function MovieCard({movie, isSearchResult = false}) {
     if (isHovered) {
       checkSpaceOnRight();
     }
+  }, [isHovered]);
+
+  // Add window resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      if (isHovered) {
+        checkSpaceOnRight();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, [isHovered]);
 
   return (
