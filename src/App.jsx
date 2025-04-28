@@ -5,6 +5,7 @@ import Header from './Components/Header'
 import ProductionHouse from './Components/ProductionHouse'
 import Slider from './Components/Slider'
 import GenreMovieList from './Components/GenreMovieList'
+import Anime from './Components/Anime'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             </>
           }/>
           <Route path="/search" element={<SearchResults/>}/>
+          <Route path="/anime" element={<Anime/>}/>
         </Routes>
       </div>
     </BrowserRouter>

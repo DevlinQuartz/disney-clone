@@ -10,30 +10,41 @@ function MovieDescriptionDialog({movie, isSearchResult = false}) {
     return text
   }
 
-  const renderStars = (rating) => {
-    // Add validation for rating
+  const renderRating = (rating) => {
     if (!rating && rating !== 0) return null;
 
-    const starRating = Math.min(Math.max(rating / 2, 0), 5); // Clamp between 0-5
+    if (movie.isAnime) {
+      return (
+        <div className='flex items-center gap-1'>
+          <HiStar className='text-yellow-400 text-xl'/>
+          <span className='text-yellow-400 text-sm sm:text-base font-semibold ml-1'>{(rating/2).toFixed(2)}</span>
+        </div>
+      );
+    }
+
+    const starRating = Math.min(Math.max(rating / 2, 0), 5);
     const fullStars = Math.floor(starRating);
     const hasHalfStar = starRating % 1 !== 0;
     const emptyStars = Math.max(5 - fullStars - (hasHalfStar ? 1 : 0), 0);
 
     return (
-      <div className='flex items-center gap-1'>
-        {[...Array(fullStars)].map((_, i) => (
-          <HiStar key={i} className='text-yellow-400 text-xl'/>
-        ))}
-        {hasHalfStar && (
-          <div className='relative'>
-            <HiOutlineStar className='text-yellow-400 text-xl'/>
-            <HiStar className='text-yellow-400 text-xl absolute top-0 left-0 w-[50%] overflow-hidden'/>
-          </div>
-        )}
-        {[...Array(emptyStars)].map((_, i) => (
-          <HiOutlineStar key={i} className='text-yellow-400 text-xl'/>
-        ))}
-      </div>
+      <>
+        <div className='flex items-center gap-1'>
+          {[...Array(fullStars)].map((_, i) => (
+            <HiStar key={i} className='text-yellow-400 text-xl'/>
+          ))}
+          {hasHalfStar && (
+            <div className='relative'>
+              <HiOutlineStar className='text-yellow-400 text-xl'/>
+              <HiStar className='text-yellow-400 text-xl absolute top-0 left-0 w-[50%] overflow-hidden'/>
+            </div>
+          )}
+          {[...Array(emptyStars)].map((_, i) => (
+            <HiOutlineStar key={i} className='text-yellow-400 text-xl'/>
+          ))}
+        </div>
+        <span className='text-yellow-400 text-sm sm:text-base font-semibold'>{(rating/2).toFixed(2)}</span>
+      </>
     );
   };
 
@@ -49,12 +60,9 @@ function MovieDescriptionDialog({movie, isSearchResult = false}) {
       
       <div className='flex items-center gap-2 sm:gap-3 mb-1'>
         {movie.vote_average ? (
-          <>
-            <div className="scale-75 sm:scale-90 md:scale-100 origin-left">
-              {renderStars(movie.vote_average)}
-            </div>
-            <span className='text-yellow-400 text-sm sm:text-base font-semibold'>{(movie.vote_average/2).toFixed(2)}</span>
-          </>
+          <div className="scale-75 sm:scale-90 md:scale-100 origin-left flex items-center gap-2">
+            {renderRating(movie.vote_average)}
+          </div>
         ) : (
           <span className='text-gray-400 text-sm'>No rating available</span>
         )}
