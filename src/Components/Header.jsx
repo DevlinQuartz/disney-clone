@@ -4,11 +4,20 @@ import pfp from '../assets/Images/pfp.jpg'
 import { HiDotsVertical, HiHome } from "react-icons/hi";
 import { HiPlayCircle, HiPlus, HiStar, HiTv, HiMagnifyingGlass } from "react-icons/hi2";
 import Headeritem from './Headeritem';
+import { useNavigate, Link } from 'react-router-dom'
 
 function Header() {
   const [toggle, setToggle] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const searchRef = useRef(null);
+  const navigate = useNavigate();
+  
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && e.target.value) {
+      navigate(`/search?q=${encodeURIComponent(e.target.value)}`);
+      setIsSearchExpanded(false);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,10 +63,14 @@ function Header() {
   return (
     <div className='fixed top-0 z-[10000] w-full bg-[#131520] flex items-center justify-between p-5'>
       <div className='flex gap-8 items-center'>
-        <img src={logo} className='w-[80px] md:w-[115px] object-cover' />
+        <Link to="/">
+          <img src={logo} className='w-[80px] md:w-[115px] object-cover cursor-pointer' />
+        </Link>
         <div className='hidden md:flex items-center gap-8'>
           {/* Home button - static */}
-          <Headeritem name="HOME" Icon={HiHome}/>
+          <Link to="/">
+            <Headeritem name="HOME" Icon={HiHome}/>
+          </Link>
           
           {/* Search and other menu items */}
           {menu.map((item) => item.name !== 'HOME' && (
@@ -71,6 +84,7 @@ function Header() {
                       placeholder="Search here..." 
                       className="bg-transparent border-b-2 border-white text-white w-[200px] sm:w-[300px] md:w-[400px] outline-none placeholder:text-gray-400 transition-all duration-300 ease-in-out py-0"
                       autoFocus
+                      onKeyPress={handleSearch}
                     />
                   </div>
                 ) : (
@@ -87,7 +101,9 @@ function Header() {
           ))}
         </div>
         <div className='flex md:hidden gap-5 items-center'>
-          <Headeritem name="" Icon={HiHome} />
+          <Link to="/">
+            <Headeritem name="" Icon={HiHome} />
+          </Link>
           <div className='relative' ref={searchRef}>
             {isSearchExpanded ? (
               <div className='flex items-center gap-2 animate-wiggle absolute left-0'>
@@ -97,6 +113,7 @@ function Header() {
                   placeholder="Search here..." 
                   className="bg-transparent border-b-2 border-white text-white w-[150px] outline-none placeholder:text-gray-400 transition-all duration-300 ease-in-out py-0"
                   autoFocus
+                  onKeyPress={handleSearch}
                 />
               </div>
             ) : (

@@ -7,9 +7,12 @@ const getTrendingVideos = axios.get(movieBaseURL + "discover/tv?api_key=" + api_
 const getMovieByGenreId = (id) => axios.get(movieBaseURL + "discover/movie?api_key=" + api_key + "&sort_by=popularity.desc&with_genres=" + id);
 const getMovieVideos = (movieId) => 
     axios.get(movieBaseURL + "movie/" + movieId + "/videos?api_key=" + api_key);
+const searchMovies = (query) => 
+    axios.get(movieBaseURL + "search/movie?api_key=" + api_key + "&query=" + query);
 
 export default {
     getTrendingVideos,
     getMovieByGenreId,
-    getMovieVideos
+    getMovieVideos,
+    searchMovies
 }

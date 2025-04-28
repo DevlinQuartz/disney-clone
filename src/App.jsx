@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import SearchResults from './Components/SearchResults'
 import './App.css'
 import Header from './Components/Header'
 import ProductionHouse from './Components/ProductionHouse'
@@ -6,12 +8,21 @@ import GenreMovieList from './Components/GenreMovieList'
 
 function App() {
   return (
-    <div className="min-h-screen w-screen pt-[80px] bg-[#1A1A1A]">
-      <Header/>
-      <Slider/>
-      <ProductionHouse/>
-      <GenreMovieList/>
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen w-screen pt-[80px] bg-[#1A1A1A]">
+        <Header/>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Slider/>
+              <ProductionHouse/>
+              <GenreMovieList/>
+            </>
+          }/>
+          <Route path="/search" element={<SearchResults/>}/>
+        </Routes>
+      </div>
+    </BrowserRouter>
   )
 }
 

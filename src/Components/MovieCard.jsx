@@ -4,7 +4,7 @@ import TrailerModal from './TrailerModal'
 import GlobalAPI from '../Services/GlobalAPI'
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original/'
 
-function MovieCard({movie}) {
+function MovieCard({movie, isSearchResult}) {
   const [isHovered, setIsHovered] = useState(false);
   const [showOnLeft, setShowOnLeft] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
@@ -46,9 +46,9 @@ function MovieCard({movie}) {
              onClick={handleClick}
              onMouseEnter={() => setIsHovered(true)}
              onMouseLeave={() => setIsHovered(false)}
-             className='w-[110px] md:w-[200px] rounded-lg hover:border-[3px] 
-             border-white transition-all duration-150 ease-in 
-             hover:scale-110 cursor-pointer'/>
+             className={`rounded-lg hover:border-[3px] border-white transition-all duration-150 ease-in hover:scale-110 cursor-pointer
+               ${isSearchResult ? 'w-[220px] md:w-[300px]' : 'w-[110px] md:w-[200px]'}`}
+        />
         {isHovered && (
           <div className={`absolute -top-5 ${showOnLeft ? 'right-[100%]' : 'left-[100%]'} pointer-events-none z-[9999] overflow-visible animate-fadeIn`}>
             <MovieDescriptionDialog movie={movie} />
