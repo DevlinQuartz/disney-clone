@@ -6,13 +6,18 @@ export default {
   theme: {
     extend: {
       keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0', transform: 'translateX(-10px)' },
+        slideIn: {
+          '0%': { opacity: '0', transform: 'translateX(-20px)' },
           '100%': { opacity: '1', transform: 'translateX(0)' }
+        },
+        slideOut: {
+          '0%': { opacity: '1', transform: 'translateX(0)' },
+          '100%': { opacity: '0', transform: 'translateX(20px)' }
         }
       },
       animation: {
-        fadeIn: 'fadeIn 0.3s ease-in-out'
+        slideIn: 'slideIn 0.3s ease-out',
+        slideOut: 'slideOut 0.3s ease-out forwards'
       }
     },
   },
