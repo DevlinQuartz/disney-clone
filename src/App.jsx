@@ -6,6 +6,7 @@ import ProductionHouse from './Components/ProductionHouse'
 import Slider from './Components/Slider'
 import GenreMovieList from './Components/GenreMovieList'
 import Anime from './Components/Anime'
+import Servant from './Components/Servant'
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
           }/>
           <Route path="/search" element={<SearchResults/>}/>
           <Route path="/anime" element={<Anime/>}/>
+          <Route path="/servant" element={<Servant/>}/>
+          <Route path="/servant/:id" element={<Servant />} />
         </Routes>
       </div>
     </BrowserRouter>
