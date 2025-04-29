@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // Update image imports to correct paths
 import SaberServant from '../assets/Images/SaberServant.png'
@@ -13,6 +13,22 @@ import ArcueidDeck from '../assets/Images/ArcueidDeck.png'
 import AokoDeck from '../assets/Images/AokoDeck.png'
 import AliceDeck from '../assets/Images/AliceDeck.png'
 import SuperAokoDeck from '../assets/Images/SuperAokoDeck.png'
+
+// Add BGM imports
+import SaberBGM from '../assets/BGM/saber.mp3'
+import CastoriaBGM from '../assets/BGM/castoria.mp3'
+import ArcueidBGM from '../assets/BGM/arcueid.mp3'
+import AokoBGM from '../assets/BGM/aoko.mp3'
+import AliceBGM from '../assets/BGM/alice.mp3'
+
+// Add BGM mapping
+const servantBGM = {
+  2: SaberBGM,
+  386: CastoriaBGM,
+  351: ArcueidBGM,
+  413: AokoBGM,
+  415: AliceBGM,
+};
 
 const servantData = [
     {
@@ -84,7 +100,8 @@ const servantData = [
             default: ["Chaotic", "Good"],
             stage2: ["Neutral", "Good"]
         },
-        gender: "Female"
+        gender: "Female",
+        traits: ["Enuma Elish Nullification", "Humanoid", "Immune to Pigify", "Non-Hominidae Servant", "Servant"]
     },
     {
         Name: "Aozaki Aoko",
@@ -248,6 +265,19 @@ function ServantDesc({ selectedServantId }) {
   // Special handling for Aoko who has multiple forms
   const isAoko = selectedServant.id === 413;
   const isAlice = selectedServant.id === 415;
+
+  useEffect(() => {
+    // Create new audio element
+    const audio = new Audio(servantBGM[selectedServantId]);
+    audio.volume = 0.3; // Set volume to 30%
+    audio.play();
+
+    // Cleanup on unmount
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [selectedServantId]);
 
   return (
     <div className="p-4">
