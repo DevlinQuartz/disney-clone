@@ -70,7 +70,7 @@ function AnimeCard({anime}) {
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="w-[220px] md:w-[300px] rounded-lg hover:border-[3px] border-white transition-all duration-150 ease-in hover:scale-105 cursor-pointer"
+        className="w-full h-auto rounded-lg hover:border-[3px] border-white transition-all duration-150 ease-in hover:scale-105 cursor-pointer object-cover"
       />
       {isHovered && (
         <div className={`absolute -top-5 ${showOnLeft ? 'right-[100%]' : 'left-[100%]'} pointer-events-none z-[9999] overflow-visible animate-fadeIn`}>

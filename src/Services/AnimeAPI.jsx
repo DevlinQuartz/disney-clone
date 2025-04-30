@@ -2,53 +2,43 @@ import axios from 'axios';
 
 const BASE_URL = 'https://api.jikan.moe/v4';
 
-// Add delay between requests to comply with rate limiting
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, 500));
 
-const getTopAnime = async () => {
+const getTopAnime = async (pageNum = 1) => {
     try {
-        await delay(1000);
+        await delay(500);
         return axios.get(`${BASE_URL}/top/anime`, {
             params: {
+                page: pageNum,
                 limit: 20,
-                filter: "bypopularity",
-                order_by: "score",
-                sort: "desc",
-                sfw: true,
-                type: "tv"
+                // filter: "bypopularity", // Removed filter as top/anime is already popular
+                // order_by: "score", // Top anime endpoint default sort is fine
+                // sort: "desc",
+                // type: "tv" // Removed type filter to include movies/ovas if present in top
             }
         });
     } catch (error) {
-        console.error('Error fetching anime:', error);
+        console.error('Error fetching top anime:', error);
         throw error;
     }
 };
 
-const getAnimeByGenre = async (genreId) => {
+const getAnimeByGenre = async (genreId, pageNum = 1) => { // Added pageNum parameter
     try {
-        await delay(1000);
-        if (genreId === 'top') {
-            return axios.get(`${BASE_URL}/top/anime`, {
-                params: {
-                    limit: 20,
-                    type: 'tv',
-                    sfw: true
-                }
-            });
-        }
+        await delay(500);
         return axios.get(`${BASE_URL}/anime`, {
             params: {
                 genres: genreId,
+                page: pageNum,
                 limit: 20,
-                type: 'tv',
-                sfw: true,
-                order_by: 'score',
+                // type: 'tv', // Removed type filter unless specifically needed
+                order_by: 'score', // Keep sorting by score
                 sort: 'desc',
-                min_score: 1
+                // min_score: 1 // Removed min_score unless specifically needed
             }
         });
     } catch (error) {
-        console.error('Error fetching anime:', error);
+        console.error(`Error fetching anime for genre ${genreId}:`, error);
         throw error;
     }
 };
