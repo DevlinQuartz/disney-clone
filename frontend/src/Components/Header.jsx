@@ -6,11 +6,15 @@ import { HiPlayCircle, HiStar, HiTv, HiMagnifyingGlass } from "react-icons/hi2";
 import { GiNinjaHeroicStance } from "react-icons/gi";
 import Headeritem from './Headeritem';
 import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext';
 
 function Header() {
   const [toggle, setToggle] = useState(false);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const searchRef = useRef(null);
+  const profileRef = useRef(null);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   
   const handleSearch = (e) => {
@@ -20,10 +24,18 @@ function Header() {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
         setIsSearchExpanded(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileMenuOpen(false);
       }
     };
 
@@ -81,7 +93,7 @@ function Header() {
                     <input 
                       type="text" 
                       placeholder="Search here..." 
-                      className="bg-transparent border-b-2 border-white text-white w-[200px] sm:w-[300px] md:w-[400px] outline-none placeholder:text-gray-400 transition-all duration-300 ease-in-out py-0"
+                      className="bg-transparent border-b-2 border-white text-white w-[150px] sm:w-[200px] md:w-[300px] outline-none placeholder:text-gray-400 transition-all duration-300 ease-in-out py-0"
                       autoFocus
                       onKeyPress={handleSearch}
                     />
@@ -146,7 +158,53 @@ function Header() {
           </div>
         </div>
       </div>
-      <img src={pfp} className='w-[55px] rounded-full' />
+
+      {/* Auth buttons or profile picture */}
+      <div className="flex items-center gap-4">
+        {user ? (
+          <div className="flex items-center gap-4">
+            <span className="text-white">{user.username}</span>
+            <div className="relative" ref={profileRef}>
+              <img 
+                src={pfp} 
+                className='w-[55px] rounded-full cursor-pointer'
+                onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)} 
+              />
+              {isProfileMenuOpen && (
+                <button
+                  onClick={handleLogout}
+                  className="absolute right-0 mt-6 w-48 px-6 py-3 bg-white text-black font-bold 
+                            rounded-md cursor-pointer border-0"
+                  style={{ backgroundColor: 'white', color: 'black' }}
+                >
+                  LOGOUT
+                </button>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className={`flex ${isSearchExpanded ? 'flex-col' : 'flex-row'} gap-4`}>
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-white text-black font-medium rounded-md w-full
+                        hover:bg-black hover:text-white hover:scale-110 hover:border-2 hover:border-white
+                        transition-all duration-300 no-underline !text-black text-center
+                        hover:!text-white whitespace-nowrap"
+            >
+              LOGIN
+            </Link>
+            <Link
+              to="/register"
+              className="px-4 py-2 bg-white text-black font-medium rounded-md w-full
+                        hover:bg-black hover:text-white hover:scale-110 hover:border-2 hover:border-white
+                        transition-all duration-300 no-underline !text-black text-center
+                        hover:!text-white whitespace-nowrap"
+            >
+              REGISTER
+            </Link>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
